@@ -20,7 +20,7 @@ fn main() {
             
             main_window.set_size(Size::Logical(LogicalSize {
                 width: 350.0,
-                height: 570.0
+                height: 580.0
             })).unwrap();
             main_window.set_resizable(false).unwrap();
             println!("Done set size");
