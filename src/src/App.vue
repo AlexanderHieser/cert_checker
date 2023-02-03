@@ -6,11 +6,11 @@ import { listen } from '@tauri-apps/api/event'
 let hasHover = ref(false);
 let dragTarget: any;
 let filePath = ref("Test");
+let hash_result = ref("");
 onMounted(() => {
   invoke('greet', { name: 'World' })
     // `invoke` returns a Promise
     .then((response) => console.log(response))
-
 })
 
 function invokee() {
@@ -35,6 +35,7 @@ function openFileDialog() {
     if(selectedFiles != null){
       if(!Array.isArray(selectedFiles)){
         filePath.value = selectedFiles
+        getFileInfo(filePath.value);
       }
     }
   });
@@ -61,12 +62,26 @@ listen('tauri://file-drop', event => {
   dropFile(event);
 })
 
+function getFileInfo(path:string){
+  console.log("Check for file path", path);
+  
+  invoke('check_file', {filePath: path}).then((result:any) => {
+    console.log("Result");
+    hash_result.value = result;
+  }).catch((error) => {
+    console.log(error);
+    
+  })
+}
+
 listen('tauri://file-drop-cancelled', event => {
   console.log(event);
   hasHover.value = false;
 })
+
 function dropFile(event:any){
   filePath.value = event.payload[0];
+  getFileInfo(filePath.value);
 }
 </script>
 
@@ -96,15 +111,8 @@ function dropFile(event:any){
       <label class="block text-left text-gray-800  font-bold mb-1 pt-2" for="username">
         Result
       </label>
-      <div class="bg-slate-300 text-gray-600 max-h-56 overflow-auto fullshadow-md rounded px-3 pt-4 pb-1 mt-2">
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Sunt harum quis placeat rem, ratione, voluptates nisi
-        deleniti mollitia voluptatem accusantium aut dolor nesciunt dolorem. Asperiores minus cum pariatur fugit
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores voluptate maiores officiis impedit nemo
-        voluptates repudiandae assumenda optio, ipsam ipsa, necessitatibus possimus nobis. Maiores quia, ex earum
-        nesciunt neque magni.
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Minima nisi in enim eligendi molestias unde.
-        Blanditiis incidunt tenetur enim eaque nisi sed harum amet? Aperiam maiores tempora quas quibusdam placeat!
-        eligendi!
+      <div class="bg-slate-300 break-words text-gray-600 max-h-56 overflow-auto fullshadow-md rounded px-3 pt-4 pb-1 mt-2">
+        {{ hash_result }}
       </div>
     </div>
   </div>
