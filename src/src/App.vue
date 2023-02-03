@@ -108,11 +108,21 @@ function dropFile(event:any){
             File</button>
         </div>
       </div>
-      <label class="block text-left text-gray-800  font-bold mb-1 pt-2" for="username">
-        Result
-      </label>
-      <div class="bg-slate-300 break-words text-gray-600 max-h-56 overflow-auto fullshadow-md rounded px-3 pt-4 pb-1 mt-2">
-        {{ hash_result }}
+      <div class="overflow-scroll" style="height: 250px;">
+        <label class="block text-left text-gray-800  font-bold mb-1 pt-2" for="username">
+          Result
+        </label>
+        <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2Bb256</label>
+        <div class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
+          {{ hash_result }}
+        </div>
+        <label class="block text-left text-gray-800  font-bold mb-1 pt-2" for="username">
+          Result
+        </label>
+        <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2Bb256</label>
+        <div class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
+          {{ hash_result }}
+        </div>
       </div>
     </div>
   </div>
