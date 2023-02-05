@@ -5,8 +5,14 @@ import { listen } from '@tauri-apps/api/event'
 
 let hasHover = ref(false);
 let dragTarget: any;
-let filePath = ref("Test");
-let hash_result = ref("");
+let filePath = ref("");
+let hash_result_512 = ref("");
+let hash_result_256 = ref("");
+
+type HashResult = {
+  blake512: string,
+  blake256: string
+}
 
 onMounted(() => {
   invoke('greet', { name: 'World' })
@@ -69,11 +75,12 @@ function getFileInfo(path:string){
   console.log("Check for file path", path);
   
   invoke('check_file', {filePath: path}).then((result:any) => {
-    console.log("Result");
-    hash_result.value = result;
+    let res = result as HashResult;
+    console.log("Result",result);
+    hash_result_256.value = res.blake256;
+    hash_result_512.value = res.blake512;
   }).catch((error) => {
     console.log(error);
-    
   })
 }
 
@@ -107,19 +114,13 @@ function dropFile(event:any){
         </div>
       </div>
       <div class="overflow-scroll" style="height: 250px;">
-        <label class="block text-left text-gray-800  font-bold mb-1 pt-2" for="username">
-          Result
-        </label>
-        <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2Bb256</label>
+        <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2s256</label>
         <div class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
-          {{ hash_result }}
+          {{ hash_result_256 }}
         </div>
-        <label class="block text-left text-gray-800  font-bold mb-1 pt-2" for="username">
-          Result
-        </label>
-        <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2Bb256</label>
+        <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2b512</label>
         <div class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
-          {{ hash_result }}
+          {{ hash_result_512 }}
         </div>
       </div>
     </div>
