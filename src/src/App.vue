@@ -7,16 +7,24 @@ let hasHover = ref(false);
 let dragTarget: any;
 let filePath = ref("Test");
 let hash_result = ref("");
+
 onMounted(() => {
   invoke('greet', { name: 'World' })
     // `invoke` returns a Promise
     .then((response) => console.log(response))
 })
 
-function invokee() {
-  console.log("Hello");
-  invoke('greet', { name: 'World' }).then((response) => console.log(response))
-}
+listen('tauri://file-drop', event => {
+  console.log(event);
+  hasHover.value = false;
+  dropFile(event);
+})
+
+listen('tauri://file-drop-cancelled', event => {
+  console.log(event);
+  hasHover.value = false;
+})
+
 /**
  * Listens to the dropenter event and sets the event target
  * Applies animation
@@ -56,11 +64,6 @@ function stopDragAnimation(event: any) {
     event.preventDefault();
   }
 }
-listen('tauri://file-drop', event => {
-  console.log(event);
-  hasHover.value = false;
-  dropFile(event);
-})
 
 function getFileInfo(path:string){
   console.log("Check for file path", path);
@@ -73,11 +76,6 @@ function getFileInfo(path:string){
     
   })
 }
-
-listen('tauri://file-drop-cancelled', event => {
-  console.log(event);
-  hasHover.value = false;
-})
 
 function dropFile(event:any){
   filePath.value = event.payload[0];
