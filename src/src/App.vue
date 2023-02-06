@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { invoke,dialog } from '@tauri-apps/api'
+import { invoke, dialog } from '@tauri-apps/api'
 import { onMounted, ref } from 'vue';
 import { listen } from '@tauri-apps/api/event'
 
@@ -45,9 +45,9 @@ function startDragAnimation(event: any) {
 }
 
 function openFileDialog() {
-  dialog.open({title : "Please select a file..." , multiple: false}).then((selectedFiles) => {
-    if(selectedFiles != null){
-      if(!Array.isArray(selectedFiles)){
+  dialog.open({ title: "Please select a file...", multiple: false }).then((selectedFiles) => {
+    if (selectedFiles != null) {
+      if (!Array.isArray(selectedFiles)) {
         filePath.value = selectedFiles
         getFileInfo(filePath.value);
       }
@@ -71,12 +71,12 @@ function stopDragAnimation(event: any) {
   }
 }
 
-function getFileInfo(path:string){
+function getFileInfo(path: string) {
   console.log("Check for file path", path);
-  
-  invoke('check_file', {filePath: path}).then((result:any) => {
+
+  invoke('check_file', { filePath: path }).then((result: any) => {
     let res = result as HashResult;
-    console.log("Result",result);
+    console.log("Result", result);
     hash_result_256.value = res.blake256;
     hash_result_512.value = res.blake512;
   }).catch((error) => {
@@ -84,7 +84,7 @@ function getFileInfo(path:string){
   })
 }
 
-function dropFile(event:any){
+function dropFile(event: any) {
   filePath.value = event.payload[0];
   getFileInfo(filePath.value);
 }
@@ -92,7 +92,8 @@ function dropFile(event:any){
 
 <template>
   <div class="p-2 m-2">
-    <div @dragenter="startDragAnimation($event)" @dragleave="stopDragAnimation($event)" @dragexit="stopDragAnimation($event)">
+    <div @dragenter="startDragAnimation($event)" @dragleave="stopDragAnimation($event)"
+      @dragexit="stopDragAnimation($event)">
       <div class="group h-28 bg-gray-50 rounded-md border-2 border-gray-500 border-dashed">
         <div class="pt-4 flex place-content-center">
           <img v-bind:class="{ 'animate-bounce': hasHover }" class="h-12 w-12" src="./assets/folder.png" alt="Folder">
@@ -106,20 +107,23 @@ function dropFile(event:any){
       </label>
       <div class="bg-slate-400 shadow-md rounded px-3 pt-4 pb-1 ">
         <div class="mb-2">
-          <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="blake" type="text" :value="filePath" placeholder="../../">
+          <o-field>
+            <o-input placeholder="..." :model-value="filePath" type="text" expanded> </o-input>
+          </o-field>
           <button @click="openFileDialog()" class="bg-blue-500 rounded-md text-white text-lg font-bold mt-2 w-full">Load
             File</button>
         </div>
       </div>
+
       <div class="overflow-scroll" style="height: 250px;">
         <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2s256</label>
-        <div class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
+        <div
+          class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
           {{ hash_result_256 }}
         </div>
         <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2b512</label>
-        <div class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
+        <div
+          class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
           {{ hash_result_512 }}
         </div>
       </div>
