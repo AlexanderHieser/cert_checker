@@ -9,6 +9,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@oruga-ui/oruga-next": "^0.5.10",
+    "@oruga-ui/theme-bulma": "^0.2.8",
     "vue": "^3.2.45",
     "vue-typed-js": "^0.1.2"
   },
