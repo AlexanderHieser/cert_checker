@@ -56,7 +56,7 @@ fn check_file(file_path: String) -> HashResult {
         blake256: get_blake2b_512(&file_bytes),
         blake512: get_blake2s_256(&file_bytes),
     };
-    get_file_stats(&file_path);
+    get_file_stats(file_path);
     hash_result
 }
 
@@ -84,17 +84,18 @@ fn get_blake2s_256(input_bytes: &Vec<u8>) -> String {
     result
 }
 
-fn get_file_stats(file_path: &str) {
-    let metadata = fs::metadata(file_path).unwrap();
-    let ex_name:(&str,&str) = get_file_name_and_ext(file_path);
+#[tauri::command]
+fn get_file_stats(file_path: String) -> FileStats {
+    let metadata = fs::metadata(&file_path).unwrap();
+    let ex_name:(&str,&str) = get_file_name_and_ext(&file_path);
     let file_stats = FileStats {
-        file_path: String::from(file_path),
+        file_path: String::from(&file_path),
         file_size: metadata.len().to_string(),
-        file_extenions: String::from(""),
-        file_name : String::from("f"),
+        file_extenions: String::from(ex_name.1),
+        file_name : String::from(ex_name.0),
         last_modified: metadata.last_access_time().to_string()
     };
-    println!("FileName {} {}",ex_name.0, ex_name.1)
+    file_stats
 }
 
 fn get_file_name_and_ext(file_path: &str) -> (&str,&str) {
@@ -119,7 +120,7 @@ fn main() {
             println!("Done set size");
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![check_file])
+        .invoke_handler(tauri::generate_handler![check_file,get_file_stats])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

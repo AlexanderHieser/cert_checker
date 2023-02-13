@@ -39,6 +39,7 @@ import { dialog, invoke } from '@tauri-apps/api';
 import { listen } from '@tauri-apps/api/event';
 import { ref } from 'vue';
 import { HashResult } from '../types/HashResult';
+import { FileProps } from '../types/FileProps';
 
 let dragTarget: any;
 let fileSize = ref(0);
@@ -84,6 +85,13 @@ function getFileInfo(path: string) {
         console.log("Result", result);
         hash_result_256.value = res.blake256;
         hash_result_512.value = res.blake512;
+    }).catch((error) => {
+        console.log(error);
+    })
+
+    invoke('get_file_stats', { filePath: path }).then((result: any) => {
+        let res = result as FileProps;
+        console.log("Result", res);
     }).catch((error) => {
         console.log(error);
     })
