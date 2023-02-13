@@ -1,7 +1,7 @@
 {
   "build": {
     "beforeDevCommand": "npm run dev --prefix src",
-    "beforeBuildCommand": "npm run build --prefx src",
+    "beforeBuildCommand": "npm run build --prefix src",
     "devPath": "http://127.0.0.1:5173",
     "distDir": "../src/dist",
     "withGlobalTauri": true
@@ -36,7 +36,7 @@
         "icons/icon.icns",
         "icons/icon.ico"
       ],
-      "identifier": "com.tauri.dev",
+      "identifier": "de.alex.certchecker",
       "longDescription": "",
       "macOS": {
         "entitlements": null,
