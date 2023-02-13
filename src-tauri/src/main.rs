@@ -43,6 +43,7 @@ impl Serialize for FileStats {
         s.serialize_field("file_name", &self.file_name)?;
         s.serialize_field("file_size", &self.file_size)?;
         s.serialize_field("file_extension", &self.file_extenions)?;
+        s.serialize_field("last_modified", &self.last_modified)?;
         s.end()
     }
 }
