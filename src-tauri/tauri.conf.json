@@ -1,8 +1,8 @@
 {
   "build": {
     "beforeDevCommand": "npm run dev --prefix src",
-    "beforeBuildCommand": "npm run build --prefix src",
-    "devPath": "http://127.0.0.1:5173",
+    "beforeBuildCommand": "npm run build --prefx src",
+    "devPath": "http://localhost:5173",
     "distDir": "../src/dist",
     "withGlobalTauri": true
   },
@@ -63,10 +63,10 @@
     "windows": [
       {
         "fullscreen": false,
-        "height": 600,
+        "height": 800,
         "resizable": true,
-        "title": "cert_checker",
-        "width": 800
+        "title": "Zertifiktor",
+        "width": 600
       }
     ]
   }
