@@ -2,7 +2,7 @@
   "build": {
     "beforeDevCommand": "npm run dev --prefix src",
     "beforeBuildCommand": "npm run build --prefx src",
-    "devPath": "http://127.0.0.1:5173",
+    "devPath": "http://localhost:5173",
     "distDir": "../src/dist",
     "withGlobalTauri": true
   },
