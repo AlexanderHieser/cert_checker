@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-    <div class="m-full">
+    <div class="m-2">
         <label class="block text-left pt-2 text-gray-800 text-sm font-bold mb-1" for="username">
             Target Path
         </label>
@@ -26,11 +26,22 @@
             </div>
         </div>
         <div class="rounded-xl">
-            <p>{{ fileSize }}</p>
             <p>{{ fileName }}</p>
             <p>{{ filePath }}</p>
         </div>
     </div>
+    <div style="height: 250px;" class="m-2">
+    <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2s256</label>
+    <div
+      class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
+      {{ hash_result?.blake256 }}
+    </div>
+    <label class="block text-left text-gray-600 font-bold mb-1 pt-2" for="blake2b">Blake2b512</label>
+    <div
+      class="bg-slate-700 break-words text-white max-h-56 overflow-auto fullshadow-md rounded px-2 pt-1 pb-1  text-sm">
+      {{ hash_result?.blake512 }}
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -47,8 +58,7 @@ let fileName = ref("");
 let hasHover = ref(false);
 
 let filePath = ref("");
-let hash_result_512 = ref("");
-let hash_result_256 = ref("");
+let hash_result = ref<HashResult>();
 
 const emits = defineEmits(['fileUpdated'])
 emits('fileUpdated', filePath)
@@ -67,7 +77,7 @@ function startDragAnimation(event: any) {
 }
 
 function openFileDialog() {
-    dialog.open({ title: "Please select a file...", multiple: false }).then((selectedFiles) => {
+    dialog.open({ title: "Please select a file...", multiple: false, directory:false }).then((selectedFiles) => {
         if (selectedFiles != null) {
             if (!Array.isArray(selectedFiles)) {
                 filePath.value = selectedFiles
@@ -83,8 +93,9 @@ function getFileInfo(path: string) {
     invoke('check_file', { filePath: path }).then((result: any) => {
         let res = result as HashResult;
         console.log("Result", result);
-        hash_result_256.value = res.blake256;
-        hash_result_512.value = res.blake512;
+        hash_result.value = {} as HashResult;
+        hash_result.value.blake256 = res.blake256;
+        hash_result.value.blake512 = res.blake512;
     }).catch((error) => {
         console.log(error);
     })

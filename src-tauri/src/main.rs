@@ -3,9 +3,10 @@
     windows_subsystem = "windows"
 )]
 
+use std::fs;
+
 use blake2::{Blake2b512, Blake2s256, Digest};
 use serde::{ser::SerializeStruct, Serialize};
-use std::{fs, os::windows::prelude::MetadataExt};
 use tauri::{LogicalSize, Manager, Size};
 
 struct HashResult {
@@ -68,11 +69,9 @@ fn get_blake2b_512(input_bytes: &Vec<u8>) -> String {
     let mut hasher = Blake2b512::new();
     hasher.update(input_bytes);
     let res = hasher.finalize();
-    dbg!("{?}", res);
     let result = format!("{:X}", res);
     result
 }
-
 /**
  * Generates Blake2s256 bit hash
  */
@@ -80,7 +79,6 @@ fn get_blake2s_256(input_bytes: &Vec<u8>) -> String {
     let mut hasher = Blake2s256::new();
     hasher.update(input_bytes);
     let res = hasher.finalize();
-    dbg!("{?}", res);
     let result = format!("{:X}", res);
     result
 }
@@ -94,7 +92,7 @@ fn get_file_stats(file_path: String) -> FileStats {
         file_size: metadata.len().to_string(),
         file_extenions: String::from(ex_name.1),
         file_name : String::from(ex_name.0),
-        last_modified: metadata.last_access_time().to_string()
+        last_modified: "not available".to_string()
     };
     file_stats
 }
